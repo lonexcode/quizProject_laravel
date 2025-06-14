@@ -31,7 +31,8 @@
             @csrf
 
             <div>
-                <label for="email" class="text-gray-600 mb-1 block">Email</label>
+                <label for="email" class="text-gray-700
+                    mb-1 block">Email</label>
                 <input type="email" name="email" id="email" placeholder="Enter your email"
                     class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 @error('email')
