@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [UserController::class, 'welcome']);
 Route::get('/mcq/{id}/{name}', [UserController::class, 'mcq']);
+Route::post('/submit-next/{id}', [UserController::class, 'submitAndNext']);
+
+
+
 Route::get('user-quiz-list/{id}/{category}', [UserController::class, 'userQuizList']);
 Route::get('start-quiz/{id}/{category}', [UserController::class, 'startQuiz']);
 Route::view('user-signup', 'user-signup');
@@ -22,6 +26,9 @@ Route::get('user-login-start-page', [UserController::class, 'userLoginStartQuiz'
 
 
 Route::get('user-logout', [UserController::class, 'logoutUser']);
+
+
+
 
 
 // ===============================

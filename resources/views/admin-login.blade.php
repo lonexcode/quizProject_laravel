@@ -16,27 +16,29 @@
             @csrf
 
             @error('user')
-            <div class="text-red-500">
-                {{ $message }}
-            </div>
+                <div class="text-red-500">
+                    {{ $message }}
+                </div>
             @enderror
             <div>
                 <label for="admin_name" class="tex-gray-600 mb-2">Admin Name</label>
-                <input type="text" name="admin_name" id="" placeholder="Enter Your Name" class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none" />
+                <input type="text" name="admin_name" id="" placeholder="Enter Your Name"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none" />
             </div>
             @error('admin_name')
-            <div class="text-red-500">
-                {{ $message }}
-            </div>
+                <div class="text-red-500">
+                    {{ $message }}
+                </div>
             @enderror
             <div>
                 <label for="admin_password" class="tex-gray-600 mb-1">Admin Password</label>
-                <input type="text" name="admin_password" id="" placeholder="Enter Admin Password" class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none" />
+                <input type="text" name="admin_password" id="" placeholder="Enter Admin Password"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none" />
             </div>
             @error('admin_password')
-            <div class="text-red-500">
-                {{ $message }}
-            </div>
+                <div class="text-red-500">
+                    {{ $message }}
+                </div>
             @enderror
             <button type="submit" class="w-full bg-blue-500 rounded-2xl px-4 py-2 text-white">Login</button>
         </form>

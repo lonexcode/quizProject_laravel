@@ -56,7 +56,8 @@
                 {{-- Confirm Password Field --}}
                 <div>
                     <label for="password_confirmation" class="text-gray-600 mb-1 block">Confirm Password</label>
-                    <input type="password" name="password_confirmation" id="confirm_password" placeholder="Confirm Password"
+                    <input type="password" name="password_confirmation" id="confirm_password"
+                        placeholder="Confirm Password"
                         class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none" />
                     @error('password_confirmation')
                         <div class="text-red-500">{{ $message }}</div>

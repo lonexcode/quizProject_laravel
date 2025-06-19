@@ -18,27 +18,26 @@
             <h1 class="text-3xl font-bold text-green-700">{{ $quizname }}</h1>
 
             <p class="text-gray-700 text-lg">
-                This quiz contains <span class="font-semibold text-green-700">{{ $count }}</span> question{{ $count > 1 ? 's' : '' }}.<br />
+                This quiz contains <span class="font-semibold text-green-700">{{ $count }}</span>
+                question{{ $count > 1 ? 's' : '' }}.<br />
                 There is <span class="font-semibold text-green-700">no time limit</span> to attempt it.
             </p>
 
             <h3 class="text-xl font-medium text-gray-800">Good Luck! 🍀</h3>
-            @if(Session('userDetails'))
-            <a href="/mcq/{{ session('firstmcq')->id }}/{{ $quizname }}" class="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-2xl transition duration-200">
-                Start Quiz
-            </a>
-
-
-
+            @if (Session('userDetails'))
+                <a href="/mcq/{{ session('firstmcq')->id }}/{{ $quizname }}"
+                    class="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-2xl transition duration-200">
+                    Start Quiz
+                </a>
             @else
-
-
-            <a href="/user-signup-start-page" class="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-2xl transition duration-200">
-                Signup to Start Quiz
-            </a>
-            <a href="/user-login-start-page" class="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-2xl transition duration-200">
-                Login to Start Quiz
-            </a>
+                <a href="/user-signup-start-page"
+                    class="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-2xl transition duration-200">
+                    Signup to Start Quiz
+                </a>
+                <a href="/user-login-start-page"
+                    class="inline-block w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-2xl transition duration-200">
+                    Login to Start Quiz
+                </a>
             @endif
         </div>
     </div>

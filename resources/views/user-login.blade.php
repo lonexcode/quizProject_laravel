@@ -13,16 +13,16 @@
         <h2 class="text-2xl text-center text-gray-800 mb-6">User Login</h2>
 
         {{-- Flash or Session Error --}}
-        @if(Session('email'))
-        <div class="bg-yellow-100 text-yellow-800 text-sm px-4 py-2 rounded mb-4">
-            {{ Session('email') }}
-        </div>
+        @if (Session('email'))
+            <div class="bg-yellow-100 text-yellow-800 text-sm px-4 py-2 rounded mb-4">
+                {{ Session('email') }}
+            </div>
         @endif
 
-        @if(Session('password'))
-        <div class="bg-yellow-100 text-yellow-800 text-sm px-4 py-2 rounded mb-4">
-            {{ Session('password') }}
-        </div>
+        @if (Session('password'))
+            <div class="bg-yellow-100 text-yellow-800 text-sm px-4 py-2 rounded mb-4">
+                {{ Session('password') }}
+            </div>
         @endif
 
 
@@ -36,9 +36,9 @@
                 <input type="email" name="email" id="email" placeholder="Enter your email"
                     class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 @error('email')
-                <div class="text-red-500 text-sm mt-1">
-                    {{ $message }}
-                </div>
+                    <div class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </div>
                 @enderror
             </div>
 
@@ -47,9 +47,9 @@
                 <input type="password" name="password" id="password" placeholder="Enter your password"
                     class="w-full px-4 py-2 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 @error('password')
-                <div class="text-red-500 text-sm mt-1">
-                    {{ $message }}
-                </div>
+                    <div class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </div>
                 @enderror
             </div>
 

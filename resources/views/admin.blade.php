@@ -11,7 +11,7 @@
 <body>
 
 
-    <x-navbar name={{$name}}></x-navbar>
+    <x-navbar name={{ $name }}></x-navbar>
 
 
 
