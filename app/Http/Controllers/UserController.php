@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Quiz;
 use App\Models\User;
 use App\Models\Mcq;
+use App\Models\Record;
 
 class UserController extends Controller
 {
@@ -117,55 +118,64 @@ class UserController extends Controller
 
     function mcq($id, $name)
     {
-        // return MCQ::where('quiz_id', Session::get('firstmcq')->quiz_id)->get();
 
-        $currentQuiz = [];
-        $currentQuiz['totalMcq'] = MCQ::where('quiz_id', Session::get('firstmcq')->quiz_id)->count();
+        $record = new Record();
+        $record->user_id = Session::get('userDetails')->id;
+        $record->quiz_id = Session::get('firstmcq')->quiz_id;
+        $record->status = 1;
 
-        $currentQuiz['currentMcq'] = 1;
-        $currentQuiz['quizName'] = $name;
-        $currentQuiz['quizId'] = Session::get('firstmcq')->quiz_id;
 
+        if ($record->save()) {
+            // return MCQ::where('quiz_id', Session::get('firstmcq')->quiz_id)->get();
+
+            $currentQuiz = [];
+            $currentQuiz['totalMcq'] = MCQ::where('quiz_id', Session::get('firstmcq')->quiz_id)->count();
+
+            $currentQuiz['currentMcq'] = 1;
+            $currentQuiz['quizName'] = $name;
+            $currentQuiz['quizId'] = Session::get('firstmcq')->quiz_id;
+
+            Session::put('currentQuiz', $currentQuiz);
+
+            $mcqData = MCQ::find($id);
+
+            return view('mcq-page', ['quizName' => $name, 'mcqData' => $mcqData]);
+        } else {
+            echo  "something went wrong";
+        }
+    }
+
+
+
+    public function submitAndNext($id)
+    {
+        // 🔸 Retrieve current quiz data (like current question number, quiz ID, name) from the session
+        $currentQuiz = Session::get('currentQuiz');
+
+        // 🔸 Move to the next question by incrementing the current MCQ counter
+        $currentQuiz['currentMcq'] += 1;
+
+        // 🔸 Save the updated quiz progress back into the session
         Session::put('currentQuiz', $currentQuiz);
 
-        $mcqData = MCQ::find($id);
+        // 🔸 Get the next MCQ from the database
+        // We are looking for the next question where:
+        // - the MCQ ID is greater than the current one (to move forward)
+        // - the quiz_id matches the current quiz
+        $mcqData = MCQ::where([
+            ['id', '>', $id],
+            ['quiz_id', '=', $currentQuiz['quizId']],
+        ])->first(); // Only get the first matching MCQ
 
-        return view('mcq-page', ['quizName' => $name, 'mcqData' => $mcqData]);
+        // 🔸 If there is a next question (MCQ), load the mcq-page view with quiz name and MCQ data
+        if ($mcqData) {
+            return view('mcq-page', [
+                'quizName' => $currentQuiz['quizName'],
+                'mcqData' => $mcqData
+            ]);
+        } else {
+            // 🔸 If no more questions are found, quiz is likely over — go to result page
+            return "result page"; // You can change this to a redirect to your result view
+        }
     }
-
-
-
-  public function submitAndNext($id)
-{
-    // 🔸 Retrieve current quiz data (like current question number, quiz ID, name) from the session
-    $currentQuiz = Session::get('currentQuiz');
-
-    // 🔸 Move to the next question by incrementing the current MCQ counter
-    $currentQuiz['currentMcq'] += 1;
-
-    // 🔸 Save the updated quiz progress back into the session
-    Session::put('currentQuiz', $currentQuiz);
-
-    // 🔸 Get the next MCQ from the database
-    // We are looking for the next question where:
-    // - the MCQ ID is greater than the current one (to move forward)
-    // - the quiz_id matches the current quiz
-    $mcqData = MCQ::where([
-        ['id', '>', $id],
-        ['quiz_id', '=', $currentQuiz['quizId']],
-    ])->first(); // Only get the first matching MCQ
-
-    // 🔸 If there is a next question (MCQ), load the mcq-page view with quiz name and MCQ data
-    if ($mcqData) {
-        return view('mcq-page', [
-            'quizName' => $currentQuiz['quizName'],
-            'mcqData' => $mcqData
-        ]);
-    } else {
-        // 🔸 If no more questions are found, quiz is likely over — go to result page
-        return "result page"; // You can change this to a redirect to your result view
-    }
-}
-
-
 }
