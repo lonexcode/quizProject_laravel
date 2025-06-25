@@ -28,10 +28,14 @@
 
             <form action="/submit-next/{{ $mcqData->id }}" method="post" class="space-y-4 text-left">
                 @csrf
+
+                <input type="hidden" name="id" value="{{ $mcqData->id }}" />
+
+
                 <label
                     class="flex items-center p-4 bg-white rounded-xl shadow-md cursor-pointer transition hover:bg-blue-50"
                     for="option_1">
-                    <input id="option_1" type="radio" name="option" value="A"
+                    <input id="option_1" type="radio" name="option" value="a"
                         class="form-radio text-blue-600" />
                     <span class="ml-3 text-gray-900 font-medium">{{ $mcqData->a }}</span>
                 </label>
@@ -39,7 +43,7 @@
                 <label
                     class="flex items-center p-4 bg-white rounded-xl shadow-md cursor-pointer transition hover:bg-blue-50"
                     for="option_2">
-                    <input id="option_2" type="radio" name="option" value="B"
+                    <input id="option_2" type="radio" name="option" value="b"
                         class="form-radio text-blue-600" />
                     <span class="ml-3 text-gray-900 font-medium">{{ $mcqData->b }}</span>
                 </label>
@@ -47,7 +51,7 @@
                 <label
                     class="flex items-center p-4 bg-white rounded-xl shadow-md cursor-pointer transition hover:bg-blue-50"
                     for="option_3">
-                    <input id="option_3" type="radio" name="option" value="C"
+                    <input id="option_3" type="radio" name="option" value="c"
                         class="form-radio text-blue-600" />
                     <span class="ml-3 text-gray-900 font-medium">{{ $mcqData->c }}</span>
                 </label>
@@ -55,7 +59,7 @@
                 <label
                     class="flex items-center p-4 bg-white rounded-xl shadow-md cursor-pointer transition hover:bg-blue-50"
                     for="option_4">
-                    <input id="option_4" type="radio" name="option" value="D"
+                    <input id="option_4" type="radio" name="option" value="d"
                         class="form-radio text-blue-600" />
                     <span class="ml-3 text-gray-900 font-medium">{{ $mcqData->d }}</span>
                 </label>

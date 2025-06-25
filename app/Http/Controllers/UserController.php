@@ -10,6 +10,7 @@ use App\Models\Quiz;
 use App\Models\User;
 use App\Models\Mcq;
 use App\Models\Record;
+use App\Models\MCQ_Record;
 
 class UserController extends Controller
 {
@@ -135,6 +136,7 @@ class UserController extends Controller
             $currentQuiz['quizName'] = $name;
             $currentQuiz['quizId'] = Session::get('firstmcq')->quiz_id;
 
+            $currentQuiz['recordId'] = $record->id;
             Session::put('currentQuiz', $currentQuiz);
 
             $mcqData = MCQ::find($id);
@@ -147,35 +149,69 @@ class UserController extends Controller
 
 
 
-    public function submitAndNext($id)
+    public function submitAndNext(Request $request, $id)
     {
-        // 🔸 Retrieve current quiz data (like current question number, quiz ID, name) from the session
+        // 🔹 Step 1: Retrieve current quiz data from session
         $currentQuiz = Session::get('currentQuiz');
 
-        // 🔸 Move to the next question by incrementing the current MCQ counter
+        // 🔹 Step 2: Move to the next question
         $currentQuiz['currentMcq'] += 1;
 
-        // 🔸 Save the updated quiz progress back into the session
+        // 🔹 Step 3: Save updated progress back to session
         Session::put('currentQuiz', $currentQuiz);
 
-        // 🔸 Get the next MCQ from the database
-        // We are looking for the next question where:
-        // - the MCQ ID is greater than the current one (to move forward)
-        // - the quiz_id matches the current quiz
+        // 🔹 Step 4: Fetch the next MCQ from database
         $mcqData = MCQ::where([
             ['id', '>', $id],
             ['quiz_id', '=', $currentQuiz['quizId']],
-        ])->first(); // Only get the first matching MCQ
+        ])->first(); // Get the next question only
 
-        // 🔸 If there is a next question (MCQ), load the mcq-page view with quiz name and MCQ data
+        // 🔹 Step 5: Check if an answer for this question already exists in the database
+        $isExist = MCQ_Record::where([
+            ['record_id', '=', $currentQuiz['recordId']],
+            ['mcq_id', '=', $request->id],
+        ])->count();
+
+        // 🔹 Step 6: If answer does not exist, create a new record
+        if ($isExist < 1) {
+            $mcq_record = new MCQ_Record();
+
+            $mcq_record->record_id      = $currentQuiz['recordId'];
+            $mcq_record->user_id        = Session::get('userDetails')->id;
+            $mcq_record->mcq_id         = $request->id;
+            $mcq_record->select_answer  = $request->option;
+
+            // 🔹 Step 7: Check if the selected answer is correct
+            $correctAnswer = MCQ::find($request->id)->correct_ans;
+
+            $mcq_record->is_correct = ($request->option === $correctAnswer) ? 1 : 0;
+
+            // 🔹 Step 8: Save the record to the database
+            if (!$mcq_record->save()) {
+                return "Something went wrong while saving your answer.";
+            }
+        }
+
+        // 🔹 Step 9: If there's a next MCQ, show the MCQ page
         if ($mcqData) {
             return view('mcq-page', [
                 'quizName' => $currentQuiz['quizName'],
-                'mcqData' => $mcqData
+                'mcqData'  => $mcqData,
             ]);
         } else {
-            // 🔸 If no more questions are found, quiz is likely over — go to result page
-            return "result page"; // You can change this to a redirect to your result view
+            // 🔹 Step 10: No more questions — go to the result page
+
+
+
+            $resultData = MCQ_Record::WithMCQ()->where('record_id', $currentQuiz['recordId'])->get();
+            
+            $correctAns = MCQ_Record::where([
+                ['record_id', '=', $currentQuiz['recordId']],
+                ['is_correct', '=', 1],
+            ])->count();
+
+            return view('quiz-result', ['resultData' => $resultData, 'correctAns' =>
+            $correctAns]); // Replace with a redirect or view later
         }
     }
 }
