@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\Mcq;
 use App\Models\Record;
 use App\Models\MCQ_Record;
+use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
 {
@@ -204,14 +205,31 @@ class UserController extends Controller
 
 
             $resultData = MCQ_Record::WithMCQ()->where('record_id', $currentQuiz['recordId'])->get();
-            
+
             $correctAns = MCQ_Record::where([
                 ['record_id', '=', $currentQuiz['recordId']],
                 ['is_correct', '=', 1],
             ])->count();
+            $record = Record::find($currentQuiz['recordId']);
 
+            if ($record) {
+                $record->status = 2;
+                $record->update();
+            }
             return view('quiz-result', ['resultData' => $resultData, 'correctAns' =>
             $correctAns]); // Replace with a redirect or view later
         }
+    }
+
+    function usersDetails()
+    {
+
+        $userId = Session::get('userDetails')->id;
+
+        // Get the actual records from the database
+        $quizRecord = Record::WithQuiz()->where('user_id', $userId)->get();
+
+
+        return view('user-details', ['quizRecord' => $quizRecord]);
     }
 }

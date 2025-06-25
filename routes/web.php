@@ -28,7 +28,7 @@ Route::get('user-login-start-page', [UserController::class, 'userLoginStartQuiz'
 Route::get('user-logout', [UserController::class, 'logoutUser']);
 
 
-
+Route::get('users-details', [UserController::class, 'usersDetails']);
 
 
 // ===============================

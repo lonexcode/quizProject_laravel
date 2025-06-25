@@ -8,7 +8,7 @@
             <a href="/" class="text-green-900 hover:text-green-800">Home</a>
 
             @if(Session('userDetails'))
-            <a href="" class="text-green-900 hover:text-green-800">Welcome:{{Session('userDetails')->name}}</a>
+            <a href="/users-details" class="text-green-900 hover:text-green-800">Welcome:{{Session('userDetails')->name}}</a>
 
             <a href="/user-logout" class="text-green-900 hover:text-green-800">Logout</a>
             @else
